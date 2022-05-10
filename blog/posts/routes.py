@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, abort, request
-from blog import app
+
 from blog.posts.forms import PostForm
 from blog.models import Post
 from blog import db
@@ -41,7 +41,7 @@ def post_update(post_id):
         post.content = form.content.data
         db.session.commit()
         flash('You post has been updated', 'success')
-        return redirect(url_for('post', post_id=post.id))
+        return redirect(url_for('posts.post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content

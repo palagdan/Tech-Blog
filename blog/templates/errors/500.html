@@ -1,0 +1,11 @@
+{% extends 'based.html' %}
+
+{% block content %}
+
+    <div class="alert alert-danger">
+        <h1>Something went wrong (500)</h1>
+    </div>
+
+    <img src="{{ url_for('static', filename='error_images/error500.jpg') }}" alt="">
+
+{% endblock %}

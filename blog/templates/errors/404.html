@@ -1,0 +1,10 @@
+{% extends 'based.html' %}
+
+{% block content %}
+
+    <div class="alert alert-warning">
+        <h1>Oops. Page is not found.(404)</h1>
+    </div>
+    <img src="{{url_for('static', filename='error_images/error404.jpg') }}" alt="">
+
+{% endblock %}

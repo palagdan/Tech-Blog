@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, flash, get_flashed_messages, abort, request
-from blog import app, mail
+from flask import Flask, render_template, redirect, url_for, flash, request
+
 from blog.users.forms import RegisterForm, LoginForm, UpdateProfileForm, ResetForm, ResetPasswordForm
 from blog.models import User, Post
 from blog import db
@@ -7,7 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 import secrets
 import os
 from flask_mail import Message
-from flask import Blueprint
+from flask import Blueprint, current_app
 
 users = Blueprint('users', __name__)
 
@@ -39,7 +39,7 @@ def login_page():
             login_user(attempted_user)
 
             flash(f'Success! You are logged in as {attempted_user.username}', category='success')
-            return redirect(url_for('main.home_page'))
+            return redirect(url_for('main.article_page'))
         else:
             flash('Username and password are not match! Please try again', category='danger')
 
@@ -57,12 +57,12 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/images', picture_fn)
+    picture_path = os.path.join(current_app.root_path, 'static/images', picture_fn)
     form_picture.save(picture_path)
     return picture_fn
 
 
-@app.route("/account", methods=['GET', 'POST'])
+@users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateProfileForm()
@@ -86,7 +86,7 @@ def account():
     return render_template('profile.html', title='Account', image_file=image_file, form=form, posts=posts)
 
 
-@app.route("/user/<string:username>")
+@users.route("/user/<string:username>")
 @login_required
 def username_page(username):
     page = request.args.get('page', 1, type=int)
@@ -105,7 +105,7 @@ def send_reset_email(user):
     '''
 
 
-@app.route('/reset_password', methods=['GET', 'POST'])
+@users.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('account'))
@@ -120,7 +120,7 @@ def reset_request():
     return render_template('reset_request.html', title='Reset Password', form=form)
 
 
-@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+@users.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('account'))

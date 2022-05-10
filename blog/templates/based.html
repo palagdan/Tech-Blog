@@ -15,17 +15,19 @@
       <header class="site-header">
          <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
             <div class="container">
-               <a class="navbar-brand" href="{{ url_for('main.home_page') }}">TECH BLOG</a>
+               <a class="navbar-brand" href="{{ url_for('main.article_page') }}">TECH BLOG</a>
                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                <span class="navbar-toggler-icon"></span>
                </button>
+             {% if current_user.is_authenticated %}
                <div class="collapse navbar-collapse" id="navbarNav">
                   <ul class="navbar-nav mr-auto">
                      <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.article_page') }}">Articles</a>
+                        <a class="nav-link active" aria-current="page" href="{{ url_for('main.article_page') }}">Posts</a>
                      </li>
                   </ul>
                </div>
+            {% endif %}
                <div>
                   {% if current_user.is_authenticated %}
                   <ul class="navbar-nav">
@@ -33,7 +35,7 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('posts.new_post') }}">New Post</a>
                      </li>
                      <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('account') }}">
+                        <a class="nav-link active" href="{{ url_for('users.account') }}">
                         <i class="fa-brands fa-grav"></i>
                         {{ current_user.username }}
                         </a>
