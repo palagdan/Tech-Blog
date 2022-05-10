@@ -1,0 +1,28 @@
+{% extends 'based.html' %}
+
+{% block title %}
+    <title>Login</title>
+{% endblock %}
+
+
+{% block content %}
+    <body class="text-center">
+        <div class="container">
+            <form action="" method="POST" class="form-signin" style="color:white">
+                {{ form.hidden_tag() }}
+                <p><img src="/blog/static/logo.png" alt=""></p>
+                <br>
+                <h1 class="h3 mb-3 font-weight-normal">
+                    What is your email address?
+                </h1>
+                <br>
+                {{ form.email.label() }}
+                {{ form.email(class="form-control", placeholder="Email address") }}
+
+                <br>
+                {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+            </form>
+        </div>
+
+    </body>
+{% endblock %}
