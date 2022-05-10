@@ -1,0 +1,13 @@
+{% extends 'based.html' %}
+
+
+
+{% block content %}
+
+    <h1 style="padding-left: 30px">Pyscript REPL</h1>
+
+    <small class="text-muted" style="padding-left: 30px">Tip: press Shift-Enter to evaluate a cell</small>
+    <div>
+    <py-repl id="my-repl" auto-generate="true"></py-repl>
+    </div>
+{% endblock %}
