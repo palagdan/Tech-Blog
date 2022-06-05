@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, abort, request
 
-from blog.posts.forms import PostForm
+from blog.posts.forms import PostForm, SearchForm
 from blog.models import Post
 from blog import db
 from flask_login import login_required, current_user
@@ -19,13 +19,13 @@ def new_post():
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('main.article_page'))
-    return render_template('create_post.html', title='New Post', form=form, legend='New Post')
+    return render_template('post_templates/create_post.html', title='New Post', form=form, legend='New Post')
 
 
 @posts.route('/post/<int:post_id>')
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post_templates/post.html', title=post.title, post=post)
 
 
 @posts.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
@@ -45,7 +45,19 @@ def post_update(post_id):
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
-    return render_template('create_post.html', title='Update Post', form=form, legend='Update post')
+    return render_template('post_templates/create_post.html', title='Update Post', form=form, legend='Update post')
+
+
+@posts.route('/post/search', methods=['POST'])
+@login_required
+def search_engine():
+    form = SearchForm()
+
+    if form.validate_on_submit():
+        # post_searched = form.searched.data
+        page = request.args.get('page', 1, type=int)
+        posts1 = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+        return render_template('post_templates/articles.html', posts=posts1)
 
 
 @posts.route('/post/<int:post_id>/delete', methods=['POST'])

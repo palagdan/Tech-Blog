@@ -4,7 +4,19 @@
 <title>Articles</title>
 {% endblock %}
 
+
+
 {% block content %}
+
+   <nav class="navbar bg-light">
+  <div class="container-fluid" style="padding-left: 350px">
+    <form class="d-flex" role="search" method="POST" action="{{ url_for('posts.search_engine') }}" >
+        {{ form.hidden_tag() }}
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
     {% for post in posts.items %}
         <article class="media content-section">
             <img src="{{ url_for('static', filename='images/' + post.author.image_file) }}" alt="" class="rounded-circle article-img" >
